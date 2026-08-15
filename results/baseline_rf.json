@@ -1,0 +1,18 @@
+{
+    "RMSE": 366.3665215141946,
+    "MAE": 203.35448709970552,
+    "R2": 0.9820929715896317,
+    "training_time": 4.207120418548584,
+    "n_features_used": 9,
+    "feature_list": [
+        "carat",
+        "cut",
+        "color",
+        "clarity",
+        "depth",
+        "table",
+        "x",
+        "y",
+        "z"
+    ]
+}
