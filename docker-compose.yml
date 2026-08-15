@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    volumes:
+      - ./backend:/app/backend
+      - ./results:/app/results
+    environment:
+      - FLASK_ENV=development
+
+  frontend:
+    build:
+      context: ./dashboard-demo
+      dockerfile: Dockerfile
+    ports:
+      - "5174:5174"
+    volumes:
+      - ./dashboard-demo:/app
+      - /app/node_modules
+    depends_on:
+      - backend
