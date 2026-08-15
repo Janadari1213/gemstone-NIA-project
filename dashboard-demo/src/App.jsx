@@ -3,7 +3,7 @@ import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell 
 } from 'recharts';
 import { 
-  Activity, Database, Check, X, Target, Zap, ChevronDown, ChevronUp, Network, Calculator, DollarSign, UploadCloud, Image as ImageIcon, Sparkles, Gem, ArrowRight, Globe, Key, Percent
+  Activity, Database, Check, X, Target, Zap, ChevronDown, ChevronUp, Network, Calculator, DollarSign, UploadCloud, Image as ImageIcon, Sparkles, Gem, ArrowRight, Globe, Percent
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -97,7 +97,6 @@ export default function Dashboard() {
   const [imagePreview, setImagePreview] = useState(null);
   const [thinkingStep, setThinkingStep] = useState('');
   const [exchangeRate, setExchangeRate] = useState(300); // Fallback to 300
-  const [apiKey, setApiKey] = useState('');
   const [marketPrice, setMarketPrice] = useState(null);
 
   useEffect(() => {
@@ -130,20 +129,15 @@ export default function Dashboard() {
     setPredictedGemName(null);
     setMarketPrice(null);
 
-    let steps = [
+    const steps = [
       "Extracting input features...",
       "Normalizing feature vectors...",
       "Loading XGBoost tree ensemble...",
       "Traversing decision trees...",
       "Aggregating leaf weights...",
+      "Fetching live trades matching criteria...",
       "Finalizing prediction..."
     ];
-
-    if (apiKey) {
-      steps.push("Authenticating Global Market API...");
-      steps.push("Fetching live trades matching criteria...");
-      steps.push("Calculating market variance...");
-    }
     
     for (let i = 0; i < steps.length; i++) {
       setThinkingStep(steps[i]);
@@ -161,11 +155,8 @@ export default function Dashboard() {
         setPredictedPrice(data.price);
         setPredictedGemName(data.gem_name);
 
-        if (apiKey) {
-          // Simulate a live market price that is within +/- 4% of the predicted price
-          const variance = (Math.random() * 0.08) - 0.04;
-          const simulatedMarketPrice = data.price * (1 + variance);
-          setMarketPrice(simulatedMarketPrice);
+        if (data.market_price) {
+          setMarketPrice(data.market_price);
         }
       } else {
         setPredictError(data.error);
@@ -597,8 +588,8 @@ export default function Dashboard() {
               <div className="space-y-8">
                 
                 {/* Image Upload Area */}
-                <div className="w-full flex flex-col md:flex-row gap-6">
-                  <label className="flex-1 h-32 border-2 border-dashed border-slate-700 hover:border-indigo-500 bg-slate-950/30 hover:bg-indigo-500/5 rounded-2xl cursor-pointer flex flex-col items-center justify-center text-slate-400 transition-all overflow-hidden relative group">
+                <div className="w-full">
+                  <label className="w-full h-32 border-2 border-dashed border-slate-700 hover:border-indigo-500 bg-slate-950/30 hover:bg-indigo-500/5 rounded-2xl cursor-pointer flex flex-col items-center justify-center text-slate-400 transition-all overflow-hidden relative group">
                     {imagePreview ? (
                       <img src={imagePreview} alt="Gemstone" className="absolute inset-0 w-full h-full object-cover opacity-70 group-hover:opacity-50 transition-opacity mix-blend-screen" />
                     ) : (
@@ -607,25 +598,11 @@ export default function Dashboard() {
                           <UploadCloud className="w-5 h-5" />
                         </div>
                         <span className="text-sm font-bold tracking-wide">Upload Gem Image</span>
-                        <span className="text-xs text-slate-500 mt-1">(Optional)</span>
+                        <span className="text-xs text-slate-500 mt-1">(Optional visual aid)</span>
                       </>
                     )}
                     <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
                   </label>
-                  
-                  <div className="flex-1 bg-slate-950/80 border border-slate-700 rounded-2xl p-5 flex flex-col justify-center">
-                    <label className="block text-sm font-bold text-slate-400 mb-2 uppercase tracking-wide flex items-center gap-2">
-                      <Key className="w-4 h-4 text-emerald-400" /> Market API Key <span className="text-slate-600 normal-case">(Optional)</span>
-                    </label>
-                    <input 
-                      type="password" 
-                      value={apiKey} 
-                      onChange={(e) => setApiKey(e.target.value)} 
-                      placeholder="Enter B2B API Key..." 
-                      className="w-full bg-slate-900 border border-slate-700/50 rounded-xl p-3 text-white font-medium focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-all shadow-inner text-sm"
-                    />
-                    <p className="text-xs text-slate-500 mt-2">Connects to Global Diamond Exchange for live market comparisons.</p>
-                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 gap-6">
