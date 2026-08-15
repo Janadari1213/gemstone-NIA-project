@@ -1,0 +1,22 @@
+{
+    "best_fitness": 0.9821,
+    "cv_r2": 0.9827,
+    "num_features_selected": 6,
+    "selected_features": [
+        "carat",
+        "cut",
+        "color",
+        "clarity",
+        "x",
+        "y"
+    ],
+    "total_runtime_seconds": 14500.5,
+    "ga_parameters": {
+        "population_size": 40,
+        "generations": 40,
+        "tournament_size": 3,
+        "crossover_prob": 0.8,
+        "mutation_prob": 0.02,
+        "elitism_count": 2
+    }
+}
