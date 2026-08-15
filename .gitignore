@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -138,3 +139,45 @@ data/processed/*
 # Models / Artifacts
 models/*
 !models/.gitkeep
+=======
+# Data files
+*.csv
+*.dat
+*.out
+*.log
+data/*
+!data/.gitkeep
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.env
+.venv/
+env.bak/
+venv.bak/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# Results and models
+results/*
+!results/.gitkeep
+*.model
+*.pkl
+*.h5
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+>>>>>>> 26457d0633f1f152547dece52a8c2c4c71d46fe2
