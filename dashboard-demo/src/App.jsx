@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell 
 } from 'recharts';
 import { 
-  Activity, Database, Check, X, Target, Zap, ChevronDown, ChevronUp, Network, Calculator, DollarSign, UploadCloud, Image as ImageIcon, Sparkles, Gem, ArrowRight
+  Activity, Database, Check, X, Target, Zap, ChevronDown, ChevronUp, Network, Calculator, DollarSign, UploadCloud, Image as ImageIcon, Sparkles, Gem, ArrowRight, Globe
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -96,6 +96,22 @@ export default function Dashboard() {
   const [predictError, setPredictError] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [thinkingStep, setThinkingStep] = useState('');
+  const [exchangeRate, setExchangeRate] = useState(300); // Fallback to 300
+
+  useEffect(() => {
+    const fetchExchangeRate = async () => {
+      try {
+        const res = await fetch('https://api.exchangerate-api.com/v4/latest/USD');
+        const data = await res.json();
+        if (data && data.rates && data.rates.LKR) {
+          setExchangeRate(data.rates.LKR);
+        }
+      } catch (err) {
+        console.error("Failed to fetch exchange rate", err);
+      }
+    };
+    fetchExchangeRate();
+  }, []);
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -654,14 +670,19 @@ export default function Dashboard() {
                       {predictedPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </div>
                     
-                    <div className="text-4xl font-black text-slate-200 mb-8 flex items-center justify-center bg-slate-800/50 px-6 py-3 rounded-2xl border border-slate-700/50">
+                    <div className="text-4xl font-black text-slate-200 mb-6 flex items-center justify-center bg-slate-800/50 px-6 py-3 rounded-2xl border border-slate-700/50">
                       <span className="text-xl text-slate-500 mr-3 font-bold">LKR</span>
-                      {(predictedPrice * 300).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      {(predictedPrice * exchangeRate).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </div>
                     
-                    <p className="text-slate-500 text-sm font-medium flex items-center gap-2">
-                      <Zap className="w-4 h-4 text-indigo-400" /> Powered by Baseline XGBoost
-                    </p>
+                    <div className="flex flex-col items-center gap-2">
+                      <p className="text-slate-500 text-sm font-medium flex items-center gap-2">
+                        <Zap className="w-4 h-4 text-indigo-400" /> Powered by Baseline XGBoost
+                      </p>
+                      <p className="text-slate-500 text-sm font-medium flex items-center gap-2">
+                        <Globe className="w-4 h-4 text-cyan-400" /> Live Rate: 1 USD = {exchangeRate.toFixed(2)} LKR
+                      </p>
+                    </div>
                   </motion.div>
                 ) : (
                   <div className="text-center text-slate-500 relative z-10 flex flex-col items-center h-full justify-center">
