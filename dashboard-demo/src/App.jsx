@@ -3,7 +3,7 @@ import {
   LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Cell 
 } from 'recharts';
 import { 
-  Activity, Database, Check, X, TrendingUp, Clock, Target, Layers, Zap, ChevronDown, ChevronUp, Beaker, Network
+  Activity, Database, Check, X, TrendingUp, Clock, Target, Layers, Zap, ChevronDown, ChevronUp, Beaker, Network, Calculator, DollarSign, UploadCloud, Image as ImageIcon
 } from 'lucide-react';
 
 // ==========================================
@@ -73,6 +73,48 @@ const Card = ({ children, className = "" }) => (
 export default function Dashboard() {
   const [sortConfig, setSortConfig] = useState({ key: 'r2', direction: 'desc' });
 
+  // Predictor state
+  const [formData, setFormData] = useState({
+    carat: 0.5, cut: 3, color: 4, clarity: 4, x: 5.0, y: 5.0, z: 3.0
+  });
+  const [predictedPrice, setPredictedPrice] = useState(null);
+  const [predicting, setPredicting] = useState(false);
+  const [predictError, setPredictError] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handlePredict = async (e) => {
+    e.preventDefault();
+    setPredicting(true);
+    setPredictError(null);
+    try {
+      const response = await fetch('http://127.0.0.1:5000/predict', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      const data = await response.json();
+      if (data.success) {
+        setPredictedPrice(data.price);
+      } else {
+        setPredictError(data.error);
+      }
+    } catch (err) {
+      setPredictError('Could not connect to Prediction API. Ensure Flask backend is running.');
+    }
+    setPredicting(false);
+  };
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: parseFloat(e.target.value) });
+  };
+
   // Sorting logic for table
   const sortedComparison = [...projectData.comparison].sort((a, b) => {
     if (a[sortConfig.key] < b[sortConfig.key]) return sortConfig.direction === 'asc' ? -1 : 1;
@@ -107,6 +149,7 @@ export default function Dashboard() {
             <NavLink href="#convergence">Convergence</NavLink>
             <NavLink href="#results">Results</NavLink>
             <NavLink href="#features">Features</NavLink>
+            <NavLink href="#predictor">Predictor</NavLink>
             <NavLink href="#findings">Key Findings</NavLink>
           </div>
         </div>
@@ -374,6 +417,117 @@ export default function Dashboard() {
             </div>
           </Card>
         </div>
+      </Section>
+
+      {/* PREDICTOR SECTION */}
+      <Section id="predictor" title="Live Price Predictor">
+        <Card className="max-w-4xl mx-auto border-indigo-900/30">
+          <div className="flex items-center gap-3 mb-8">
+            <Calculator className="w-6 h-6 text-indigo-400" />
+            <h3 className="text-2xl font-semibold text-white">XGBoost Inference Engine</h3>
+          </div>
+          
+          <form onSubmit={handlePredict} className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-6">
+              
+              {/* Image Upload Area */}
+              <div className="w-full flex items-center justify-center">
+                <label className="w-full h-32 border-2 border-dashed border-slate-700 hover:border-indigo-500 hover:bg-indigo-500/5 rounded-xl cursor-pointer flex flex-col items-center justify-center text-slate-400 transition-all overflow-hidden relative">
+                  {imagePreview ? (
+                    <img src={imagePreview} alt="Gemstone" className="absolute inset-0 w-full h-full object-cover opacity-60 mix-blend-screen" />
+                  ) : (
+                    <>
+                      <UploadCloud className="w-8 h-8 mb-2" />
+                      <span className="text-sm font-medium">Upload Gem Image (Optional)</span>
+                    </>
+                  )}
+                  <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
+                </label>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-400 mb-2">Carat (Weight/Grams) (Max 10.0)</label>
+                <input type="number" step="0.01" max="10.0" min="0.1" name="carat" value={formData.carat} onChange={handleInputChange} className="w-full bg-slate-950/50 border border-slate-700 rounded-lg p-3 text-white focus:outline-none focus:border-indigo-500" required />
+              </div>
+              
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-400 mb-2">Cut (1-5)</label>
+                  <input type="number" min="1" max="5" name="cut" value={formData.cut} onChange={handleInputChange} className="w-full bg-slate-950/50 border border-slate-700 rounded-lg p-3 text-white focus:outline-none focus:border-indigo-500" required />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-400 mb-2">Color (1-7)</label>
+                  <input type="number" min="1" max="7" name="color" value={formData.color} onChange={handleInputChange} className="w-full bg-slate-950/50 border border-slate-700 rounded-lg p-3 text-white focus:outline-none focus:border-indigo-500" required />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-400 mb-2">Clarity (1-8)</label>
+                  <input type="number" min="1" max="8" name="clarity" value={formData.clarity} onChange={handleInputChange} className="w-full bg-slate-950/50 border border-slate-700 rounded-lg p-3 text-white focus:outline-none focus:border-indigo-500" required />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-400 mb-2">Length X (1-10mm)</label>
+                  <input type="number" step="0.01" min="1" max="15" name="x" value={formData.x} onChange={handleInputChange} className="w-full bg-slate-950/50 border border-slate-700 rounded-lg p-3 text-white focus:outline-none focus:border-indigo-500" required />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-400 mb-2">Width Y (1-10mm)</label>
+                  <input type="number" step="0.01" min="1" max="15" name="y" value={formData.y} onChange={handleInputChange} className="w-full bg-slate-950/50 border border-slate-700 rounded-lg p-3 text-white focus:outline-none focus:border-indigo-500" required />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-400 mb-2">Depth Z (1-10mm)</label>
+                  <input type="number" step="0.01" min="1" max="15" name="z" value={formData.z} onChange={handleInputChange} className="w-full bg-slate-950/50 border border-slate-700 rounded-lg p-3 text-white focus:outline-none focus:border-indigo-500" required />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex flex-col justify-center items-center p-8 bg-slate-900/50 border border-slate-800 rounded-xl relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent"></div>
+              
+              {predicting ? (
+                <div className="text-indigo-400 animate-pulse flex flex-col items-center gap-4 relative z-10">
+                  <Activity className="w-12 h-12" />
+                  <span className="text-lg font-medium">Running Inference...</span>
+                </div>
+              ) : predictedPrice !== null ? (
+                <div className="text-center relative z-10">
+                  <div className="text-slate-400 text-sm font-medium uppercase tracking-wider mb-2">Predicted Market Value</div>
+                  <div className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 mb-4 flex items-center justify-center">
+                    <DollarSign className="w-10 h-10 text-emerald-400 mr-1" />
+                    {predictedPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </div>
+                  <p className="text-slate-500 text-sm">Powered by Baseline XGBoost Model</p>
+                </div>
+              ) : (
+                <div className="text-center text-slate-500 relative z-10 flex flex-col items-center">
+                  {imagePreview ? (
+                    <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-slate-800 mb-4 shadow-xl">
+                      <img src={imagePreview} alt="Gem" className="w-full h-full object-cover" />
+                    </div>
+                  ) : (
+                    <ImageIcon className="w-16 h-16 mx-auto mb-4 opacity-20" />
+                  )}
+                  <p>Enter gemstone characteristics and run prediction to see the estimated price.</p>
+                </div>
+              )}
+              
+              {predictError && (
+                <div className="mt-4 p-3 bg-rose-500/10 border border-rose-500/20 rounded-lg text-rose-400 text-sm text-center relative z-10 w-full">
+                  {predictError}
+                </div>
+              )}
+
+              <button 
+                type="submit" 
+                disabled={predicting}
+                className="mt-8 w-full py-4 px-6 bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 text-white font-semibold rounded-lg shadow-lg shadow-indigo-500/20 transition-all relative z-10 flex items-center justify-center gap-2"
+              >
+                <Zap className="w-5 h-5" />
+                {predicting ? 'Processing...' : 'Run Prediction'}
+              </button>
+            </div>
+          </form>
+        </Card>
       </Section>
 
       {/* KEY FINDINGS SECTION */}
