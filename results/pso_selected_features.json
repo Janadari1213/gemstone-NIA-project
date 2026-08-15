@@ -1,0 +1,22 @@
+{
+    "fitness": 0.9766429505348205,
+    "cv_r2": 0.9806429505348205,
+    "n_features_selected": 4,
+    "selected_features": [
+        "carat",
+        "cut",
+        "color",
+        "clarity"
+    ],
+    "pso_parameters": {
+        "num_particles": 30,
+        "max_iter": 40,
+        "c1": 1.5,
+        "c2": 1.5,
+        "w_max": 0.9,
+        "w_min": 0.4,
+        "v_min": -4.0,
+        "v_max": 4.0
+    },
+    "total_runtime_seconds": 149.32811903953552
+}
