@@ -81,6 +81,7 @@ export default function Dashboard() {
   const [predicting, setPredicting] = useState(false);
   const [predictError, setPredictError] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [thinkingStep, setThinkingStep] = useState('');
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -93,6 +94,22 @@ export default function Dashboard() {
     e.preventDefault();
     setPredicting(true);
     setPredictError(null);
+    setPredictedPrice(null);
+
+    const steps = [
+      "Extracting input features...",
+      "Normalizing feature vectors...",
+      "Loading XGBoost tree ensemble...",
+      "Traversing decision trees...",
+      "Aggregating leaf weights...",
+      "Finalizing prediction..."
+    ];
+    
+    for (let i = 0; i < steps.length; i++) {
+      setThinkingStep(steps[i]);
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+
     try {
       const response = await fetch('http://127.0.0.1:5000/predict', {
         method: 'POST',
@@ -485,16 +502,20 @@ export default function Dashboard() {
               <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent"></div>
               
               {predicting ? (
-                <div className="text-indigo-400 animate-pulse flex flex-col items-center gap-4 relative z-10">
-                  <Activity className="w-12 h-12" />
-                  <span className="text-lg font-medium">Running Inference...</span>
+                <div className="text-indigo-400 animate-pulse flex flex-col items-center gap-4 relative z-10 h-32 justify-center">
+                  <Activity className="w-12 h-12 mb-2" />
+                  <span className="text-lg font-medium">{thinkingStep}</span>
                 </div>
               ) : predictedPrice !== null ? (
-                <div className="text-center relative z-10">
+                <div className="text-center relative z-10 w-full">
                   <div className="text-slate-400 text-sm font-medium uppercase tracking-wider mb-2">Predicted Market Value</div>
-                  <div className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 mb-4 flex items-center justify-center">
-                    <DollarSign className="w-10 h-10 text-emerald-400 mr-1" />
+                  <div className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 mb-2 flex items-center justify-center">
+                    <DollarSign className="w-8 h-8 text-emerald-400 mr-1" />
                     {predictedPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </div>
+                  <div className="text-3xl font-bold text-slate-300 mb-6 flex items-center justify-center">
+                    <span className="text-xl text-slate-500 mr-2 font-medium">LKR</span>
+                    {(predictedPrice * 300).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </div>
                   <p className="text-slate-500 text-sm">Powered by Baseline XGBoost Model</p>
                 </div>
