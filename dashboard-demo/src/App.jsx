@@ -75,7 +75,7 @@ export default function Dashboard() {
 
   // Predictor state
   const [formData, setFormData] = useState({
-    carat: 0.5, cut: 3, color: 4, clarity: 4, x: 5.0, y: 5.0, z: 3.0
+    gemName: 'Diamond', carat: 0.5, cut: 3, color: 4, clarity: 4, x: 5.0, y: 5.0, z: 3.0
   });
   const [predictedPrice, setPredictedPrice] = useState(null);
   const [predicting, setPredicting] = useState(false);
@@ -129,7 +129,11 @@ export default function Dashboard() {
   };
 
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: parseFloat(e.target.value) });
+    const { name, value, type } = e.target;
+    setFormData({ 
+      ...formData, 
+      [name]: type === 'number' ? parseFloat(value) : value 
+    });
   };
 
   // Sorting logic for table
@@ -462,9 +466,15 @@ export default function Dashboard() {
                 </label>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-slate-400 mb-2">Carat (Weight/Grams) (Max 10.0)</label>
-                <input type="number" step="0.01" max="10.0" min="0.1" name="carat" value={formData.carat} onChange={handleInputChange} className="w-full bg-slate-950/50 border border-slate-700 rounded-lg p-3 text-white focus:outline-none focus:border-indigo-500" required />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-400 mb-2">Gem Name</label>
+                  <input type="text" name="gemName" value={formData.gemName} onChange={handleInputChange} placeholder="e.g. Diamond" className="w-full bg-slate-950/50 border border-slate-700 rounded-lg p-3 text-white focus:outline-none focus:border-indigo-500" required />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-400 mb-2">Carat (Max 10.0)</label>
+                  <input type="number" step="0.01" max="10.0" min="0.1" name="carat" value={formData.carat} onChange={handleInputChange} className="w-full bg-slate-950/50 border border-slate-700 rounded-lg p-3 text-white focus:outline-none focus:border-indigo-500" required />
+                </div>
               </div>
               
               <div className="grid grid-cols-3 gap-4">
@@ -508,7 +518,7 @@ export default function Dashboard() {
                 </div>
               ) : predictedPrice !== null ? (
                 <div className="text-center relative z-10 w-full">
-                  <div className="text-slate-400 text-sm font-medium uppercase tracking-wider mb-2">Predicted Market Value</div>
+                  <div className="text-slate-400 text-sm font-medium uppercase tracking-wider mb-2">Predicted Market Value for {formData.gemName || 'Gemstone'}</div>
                   <div className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 mb-2 flex items-center justify-center">
                     <DollarSign className="w-8 h-8 text-emerald-400 mr-1" />
                     {predictedPrice.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
