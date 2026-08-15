@@ -1,7 +1,14 @@
-<<<<<<< HEAD
-# Gemstone Price Prediction using GA & PSO
+# Gemstone Price Prediction using Nature-Inspired Feature Selection
 
 An Nature-Inspired Algorithms (NIA) mini-project for predicting gemstone prices. This repository utilizes metaheuristic optimization techniques—namely **Genetic Algorithms (GA)** and **Particle Swarm Optimization (PSO)**—for feature selection, combined with machine learning models (**Random Forest** and **XGBoost**) for price prediction.
+
+---
+
+## 👥 Team Members
+- **Sajini** (Index: `[Index Number]`) — Working on Random Forest & Genetic Algorithm
+- **Buddhika** (Index: `[Index Number]`) — Working on XGBoost & Particle Swarm Optimization
+
+**Module Lecturer:** `[Lecturer Name]`
 
 ---
 
@@ -9,18 +16,25 @@ An Nature-Inspired Algorithms (NIA) mini-project for predicting gemstone prices.
 
 ```text
 gemstone-NIA-project/
-├── data/
-│   ├── raw/                  # Raw dataset files
-│   └── processed/            # Preprocessed datasets
-├── models/                   # Saved model artifacts (.pkl, .joblib)
+├── data/                     # Raw and preprocessed dataset files (git-ignored)
+│   ├── raw/
+│   └── processed/
+├── models/                   # Saved trained model artifacts (.pkl, .joblib)
 ├── notebooks/                # Jupyter Notebooks for exploration and prototyping
-├── src/
-│   ├── preprocessing/        # Dataset cleaning and scaling scripts
-│   ├── models/               # Model training and evaluation scripts
-│   └── feature_selection/    # GA and PSO feature selection implementations
+│   ├── sajini/               # Sajini's experimental notebooks
+│   └── buddhika/             # Buddhika's experimental notebooks
+├── report/                   # Final project report drafts and references
+├── results/                  # Generated evaluation metrics, plots, and saved models
+├── src/                      # Reusable Python modules
+│   ├── config.py             # Domain mappings (categories, splits)
+│   ├── evaluate.py           # Evaluation metrics and plotting
+│   ├── ga.py                 # Genetic Algorithm implementation/wrapper
+│   ├── models.py             # Model training and prediction pipelines
+│   ├── preprocessing.py      # Data cleaning and transformations
+│   └── pso.py                # Particle Swarm Optimization implementation/wrapper
 ├── .gitignore                # Git exclusions
-├── config.py                 # Central configurations (paths, seed, hyperparams)
-├── README.md                 # Project overview and guidelines
+├── config.py                 # Central configuration for directory paths and parameters
+├── README.md                 # Project documentation
 └── requirements.txt          # Python dependencies
 ```
 
@@ -44,11 +58,11 @@ This project is split into two main branches off `main` for parallel development
 
 ---
 
-## 🚀 How to Setup and Run
+## 🚀 Setup Instructions
 
 ### 1. Clone the repository and navigate to the folder
 ```bash
-git clone https://github.com/Sajini2/gemstone-NIA-project.git
+git clone <repository_url>
 cd gemstone-NIA-project
 ```
 
@@ -62,73 +76,20 @@ cd gemstone-NIA-project
     git checkout buddhika-pso
     ```
 
-### 3. Install dependencies
-It is recommended to use a virtual environment (`venv`):
+### 3. Create a virtual environment and install dependencies
+It is recommended to use a virtual environment:
 ```bash
 python -m venv venv
-venv\Scripts\activate       # On Windows
-source venv/bin/activate    # On Unix/macOS
+
+# On Windows:
+venv\Scripts\activate
+
+# On macOS/Linux:
+source venv/bin/activate
+
+# Install requirements
 pip install -r requirements.txt
 ```
 
----
-
-## 🛠️ Algorithms and Technology Stack
-*   **Language:** Python 3.8+
-*   **Machine Learning:** Scikit-Learn, XGBoost
-*   **Optimization:** DEAP (for GA), custom PSO/PyPSO
-*   **Data Analysis:** Pandas, NumPy, Matplotlib, Seaborn
-=======
-# Gemstone Price Prediction using Nature-Inspired Feature Selection
-
-## Project Description
-This project aims to predict the price of gemstones using feature selection techniques based on Nature-Inspired Algorithms. We will explore Genetic Algorithms (GA) and Particle Swarm Optimization (PSO) for feature selection and compare their performance against baseline models like Random Forest and XGBoost without feature selection.
-
-## Team Members
-- Sajini (Index: [Index Number])
-- Buddhika (Index: [Index Number])
-
-**Module Lecturer:** [Lecturer Name]
-
-## Folder Structure
-- `/data`: Raw and cleaned CSV files (not tracked by git).
-- `/notebooks`: Jupyter notebooks for data exploration and testing.
-  - `/sajini`: Notebooks for Sajini.
-  - `/buddhika`: Notebooks for Buddhika.
-- `/src`: Reusable Python modules.
-  - `config.py`: Shared constants (random seeds, category mappings, split ratios).
-  - `preprocessing.py`: Data cleaning and preprocessing functions.
-  - `ga.py`: Genetic Algorithm implementation/wrapper.
-  - `pso.py`: Particle Swarm Optimization implementation/wrapper.
-  - `models.py`: Model definition and training scripts.
-  - `evaluate.py`: Model evaluation metrics and plotting.
-- `/results`: Generated metrics, plots, and saved models.
-- `/report`: Final project report drafts and references.
-
-## Setup Instructions
-1. **Clone the repository:**
-   ```bash
-   git clone <repository_url>
-   cd gemstone-NIA-project
-   ```
-
-2. **Create a virtual environment (optional but recommended):**
-   ```bash
-   python -m venv venv
-   # On Windows:
-   venv\Scripts\activate
-   # On macOS/Linux:
-   source venv/bin/activate
-   ```
-
-3. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Add data:**
-   Place your dataset (e.g., `gemstone.csv`) inside the `/data` folder.
-
-5. **Run tests/exploration:**
-   Check out the `/notebooks` folder to start exploring!
->>>>>>> 26457d0633f1f152547dece52a8c2c4c71d46fe2
+### 4. Place Data Files
+Place raw dataset files inside the `data/raw/` directory (e.g., `diamonds.csv` and `gemstone.csv`).

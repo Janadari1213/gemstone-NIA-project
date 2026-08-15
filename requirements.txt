@@ -1,22 +1,10 @@
-<<<<<<< HEAD
-numpy>=1.22.0
-pandas>=1.4.0
-scikit-learn>=1.0.0
-xgboost>=1.5.0
-matplotlib>=3.5.0
-seaborn>=0.11.0
-joblib>=1.1.0
-deap>=1.3.0
-jupyterlab>=3.0.0
-=======
 pandas
 numpy
 scikit-learn
 xgboost
 matplotlib
 seaborn
-# deap (for custom GA or use DEAP)
+joblib
 deap
-# pyswarms (for custom PSO or pyswarms)
 pyswarms
->>>>>>> 26457d0633f1f152547dece52a8c2c4c71d46fe2
+jupyterlab
