@@ -48,7 +48,7 @@ This project aims to predict the price of gemstones using feature selection tech
    ```
 
 4. **Add data:**
-   Place your dataset (e.g., `gemstone.csv`) inside the `/data` folder.
-
+   Place your dataset inside the `/data` folder.
+   *Note: For the gemstone dataset, the raw input file is `cubic_zirconia.csv`, and the cleaned output file is named `gemstone_clean.csv`. This maintains consistency across the project while preserving the raw filename.*
 5. **Run tests/exploration:**
    Check out the `/notebooks` folder to start exploring!
