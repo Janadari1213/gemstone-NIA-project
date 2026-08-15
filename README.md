@@ -92,4 +92,8 @@ pip install -r requirements.txt
 ```
 
 ### 4. Place Data Files
-Place raw dataset files inside the `data/raw/` directory (e.g., `diamonds.csv` and `gemstone.csv`).
+Place your dataset inside the `/data/raw` folder.
+*Note: For the gemstone dataset, the raw input file is `cubic_zirconia.csv`, and the cleaned output file is named `gemstone_clean.csv`. For diamonds, it is `diamonds.csv`.*
+
+### 5. Run tests/exploration
+Check out the `/notebooks` folder to start exploring!

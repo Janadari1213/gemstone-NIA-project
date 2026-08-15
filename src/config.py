@@ -1,5 +1,10 @@
 # Shared configuration for Gemstone Price Prediction project
 
+# Note on data files:
+# Raw input file for the gemstone dataset is named: cubic_zirconia.csv
+# Cleaned output file is consistently named: gemstone_clean.csv
+# This maintains consistency across the project while preserving the raw filename.
+
 # Random state for reproducibility
 RANDOM_STATE = 42
 
