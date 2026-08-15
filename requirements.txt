@@ -4,7 +4,7 @@ scikit-learn
 xgboost
 matplotlib
 seaborn
-# deap (for custom GA or use DEAP)
+joblib
 deap
-# pyswarms (for custom PSO or pyswarms)
 pyswarms
+jupyterlab

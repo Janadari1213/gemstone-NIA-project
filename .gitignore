@@ -1,35 +1,56 @@
-# Data files
-*.dat
-*.out
-*.log
-data/*
-!data/.gitkeep
-
-# Python
+# Python compiler artifacts
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
-env/
+
+# Virtual environments
 venv/
-.env
 .venv/
+env/
+Active_Resources/
 env.bak/
 venv.bak/
 
 # Jupyter Notebook
-.ipynb_checkpoints
-*.ipynb_checkpoints/
+.ipynb_checkpoints/
+*.ipynb_checkpoints
 
-# Results and models
+# IDE configurations
+.vscode/
+.idea/
+
+# Data directories and large datasets
+data/*
+!data/.gitkeep
+data/raw/*
+!data/raw/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+*.csv
+*.xlsx
+*.zip
+*.tar.gz
+*.json
+*.dat
+*.out
+
+# Model artifacts and results
+models/*
+!models/.gitkeep
 results/*
 !results/.gitkeep
-*.model
 *.pkl
+*.joblib
 *.h5
+*.model
 
-# OS generated files
+# Logs
+*.log
+pip-log.txt
+
+# OS-specific files
 .DS_Store
 .DS_Store?
 ._*
